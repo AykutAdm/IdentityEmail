@@ -3,34 +3,309 @@
     Layout = null;
 }
 
-<link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kayıt Ol - Mail Gönderme Sistemi</title>
+    <link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-<form method="post">
-    <div class="container">
-        <br />
-        <h4>Yeni Kullanıcı Kayıt Sayfası</h4>
-        <br>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
 
-        <label>Adınız</label>
-        <input type="text" asp-for="Name" class="form-control">
-        <br>
+        .register-container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+            max-width: 900px;
+            width: 100%;
+            display: flex;
+            animation: fadeIn 0.5s ease-in;
+        }
 
-        <label>Soyadınız</label>
-        <input type="text" asp-for="Surname" class="form-control">
-        <br>
+        @@keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
 
-        <label>Kullanıcı Adınız</label>
-        <input type="text" asp-for="UserName" class="form-control">
-        <br>
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
 
-        <label>Mail Adresiniz</label>
-        <input type="text" asp-for="Email" class="form-control">
-        <br>
+        .register-left {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 60px 40px;
+            color: white;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
 
-        <label>Şifreniz</label>
-        <input type="password" asp-for="Password" class="form-control">
-        <br />
-        <button type="submit" class="btn btn-dark">Kayıt Ol</button>
+            .register-left i {
+                font-size: 80px;
+                margin-bottom: 30px;
+                opacity: 0.9;
+            }
+
+            .register-left h2 {
+                font-size: 28px;
+                font-weight: 700;
+                margin-bottom: 15px;
+            }
+
+            .register-left p {
+                font-size: 16px;
+                opacity: 0.9;
+                line-height: 1.6;
+            }
+
+        .register-right {
+            padding: 60px 50px;
+            flex: 1.2;
+        }
+
+        .register-header {
+            margin-bottom: 40px;
+        }
+
+            .register-header h3 {
+                font-size: 32px;
+                font-weight: 700;
+                color: #333;
+                margin-bottom: 10px;
+            }
+
+            .register-header p {
+                color: #666;
+                font-size: 15px;
+            }
+
+        .form-group {
+            margin-bottom: 25px;
+            position: relative;
+        }
+
+            .form-group label {
+                display: block;
+                margin-bottom: 8px;
+                color: #555;
+                font-weight: 500;
+                font-size: 14px;
+            }
+
+        .input-group-custom {
+            position: relative;
+        }
+
+            .input-group-custom i {
+                position: absolute;
+                left: 15px;
+                top: 50%;
+                transform: translateY(-50%);
+                color: #999;
+                font-size: 16px;
+            }
+
+        .form-control {
+            width: 100%;
+            padding: 14px 15px 14px 45px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 15px;
+            transition: all 0.3s ease;
+            background-color: #f8f9fa;
+        }
+
+            .form-control:focus {
+                outline: none;
+                border-color: #667eea;
+                background-color: white;
+                box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+            }
+
+        .btn-register {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            border-radius: 10px;
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+        }
+
+            .btn-register:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+            }
+
+        .login-link {
+            text-align: center;
+            margin-top: 25px;
+            color: #666;
+            font-size: 14px;
+        }
+
+            .login-link a {
+                color: #667eea;
+                text-decoration: none;
+                font-weight: 600;
+            }
+
+                .login-link a:hover {
+                    text-decoration: underline;
+                }
+
+        @@media (max-width: 768px) {
+            .register-container {
+                flex-direction: column;
+            }
+
+            .register-left {
+                padding: 40px 30px;
+            }
+
+                .register-left i {
+                    font-size: 60px;
+                    margin-bottom: 20px;
+                }
+
+                .register-left h2 {
+                    font-size: 24px;
+                }
+
+            .register-right {
+                padding: 40px 30px;
+            }
+
+            .register-header h3 {
+                font-size: 26px;
+            }
+        }
+
+        .feature-list {
+            margin-top: 30px;
+            text-align: left;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            font-size: 14px;
+        }
+
+            .feature-item i {
+                font-size: 18px;
+                margin-right: 12px;
+                margin-bottom: 0;
+            }
+    </style>
+</head>
+<body>
+    <div class="register-container">
+        <div class="register-left">
+            <i class="fas fa-envelope-open-text"></i>
+            <h2>Mail Gönderme Sistemi</h2>
+            <p>Profesyonel mail yönetimi ve toplu gönderim çözümü</p>
+
+            <div class="feature-list">
+                <div class="feature-item">
+                    <i class="fas fa-check-circle"></i>
+                    <span>Hızlı ve güvenli gönderim</span>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-check-circle"></i>
+                    <span>Toplu mail yönetimi</span>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-check-circle"></i>
+                    <span>Detaylı raporlama</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="register-right">
+            <div class="register-header">
+                <h3>Hesap Oluştur</h3>
+                <p>Bilgilerinizi girerek hemen başlayın</p>
+            </div>
+
+            <form method="post">
+                <div class="form-group">
+                    <label>Adınız</label>
+                    <div class="input-group-custom">
+                        <i class="fas fa-user"></i>
+                        <input type="text" asp-for="Name" class="form-control" placeholder="Adınızı girin" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Soyadınız</label>
+                    <div class="input-group-custom">
+                        <i class="fas fa-user"></i>
+                        <input type="text" asp-for="Surname" class="form-control" placeholder="Soyadınızı girin" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Kullanıcı Adı</label>
+                    <div class="input-group-custom">
+                        <i class="fas fa-at"></i>
+                        <input type="text" asp-for="UserName" class="form-control" placeholder="Kullanıcı adınızı belirleyin" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>E-posta Adresi</label>
+                    <div class="input-group-custom">
+                        <i class="fas fa-envelope"></i>
+                        <input type="email" asp-for="Email" class="form-control" placeholder="ornek@email.com" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Şifre</label>
+                    <div class="input-group-custom">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" asp-for="Password" class="form-control" placeholder="Güçlü bir şifre oluşturun" required>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-register">
+                    <i class="fas fa-user-plus"></i> Kayıt Ol
+                </button>
+
+                <div class="login-link">
+                    Zaten hesabınız var mı? <a href="/Login">Giriş Yapın</a>
+                </div>
+            </form>
+        </div>
     </div>
-    
-</form>
+</body>
+</html>
