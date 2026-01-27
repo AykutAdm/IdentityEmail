@@ -1,0 +1,36 @@
+﻿@model CreateUserRegisterDto
+@{
+    Layout = null;
+}
+
+<link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+<form method="post">
+    <div class="container">
+        <br />
+        <h4>Yeni Kullanıcı Kayıt Sayfası</h4>
+        <br>
+
+        <label>Adınız</label>
+        <input type="text" asp-for="Name" class="form-control">
+        <br>
+
+        <label>Soyadınız</label>
+        <input type="text" asp-for="Surname" class="form-control">
+        <br>
+
+        <label>Kullanıcı Adınız</label>
+        <input type="text" asp-for="UserName" class="form-control">
+        <br>
+
+        <label>Mail Adresiniz</label>
+        <input type="text" asp-for="Email" class="form-control">
+        <br>
+
+        <label>Şifreniz</label>
+        <input type="password" asp-for="Password" class="form-control">
+        <br />
+        <button type="submit" class="btn btn-dark">Kayıt Ol</button>
+    </div>
+    
+</form>
