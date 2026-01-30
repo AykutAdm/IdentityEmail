@@ -37,10 +37,18 @@ namespace IdentityEmail.Controllers
 
             if (result.Succeeded)
             {
-                return RedirectToAction("Index", "Login");
+                return RedirectToAction("UserLogin", "Login");
             }
 
-            return View(createUserRegisterDto);
+            else
+            {
+                foreach (var item in result.Errors)
+                {
+                    ModelState.AddModelError("", item.Description);
+                }
+            }
+
+            return View();
         }
     }
 }

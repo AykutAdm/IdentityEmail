@@ -10,5 +10,7 @@ namespace IdentityEmail.Context
         {
             optionsBuilder.UseSqlServer("Server=DESKTOP-D0QM5NB\\SQLEXPRESS;initial Catalog=EmailDb;Integrated Security=True;TrustServerCertificate=True;");
         }
+
+        public DbSet<Message> Messages { get; set; }
     }
 }

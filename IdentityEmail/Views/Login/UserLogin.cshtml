@@ -1,14 +1,15 @@
-﻿@model CreateUserRegisterDto
+﻿@model LoginUserDto
 @{
     Layout = null;
 }
+
 
 <!DOCTYPE html>
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kayıt Ol - Mail Gönderme Sistemi</title>
+    <title>Giriş Yap - Mail Gönderme Sistemi</title>
     <link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -252,59 +253,37 @@
 
         <div class="register-right">
             <div class="register-header">
-                <h3>Hesap Oluştur</h3>
+                <h3>Giriş Yap</h3>
                 <p>Bilgilerinizi girerek hemen başlayın</p>
             </div>
 
             <form method="post">
+               
                 <div class="form-group">
-                    <label>Adınız</label>
-                    <div class="input-group-custom">
-                        <i class="fas fa-user"></i>
-                        <input type="text" asp-for="Name" class="form-control" placeholder="Adınızı girin" required>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label>Soyadınız</label>
-                    <div class="input-group-custom">
-                        <i class="fas fa-user"></i>
-                        <input type="text" asp-for="Surname" class="form-control" placeholder="Soyadınızı girin" required>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label>Kullanıcı Adı</label>
+                    <label>Kullanıcı Adınız</label>
                     <div class="input-group-custom">
                         <i class="fas fa-at"></i>
-                        <input type="text" asp-for="UserName" class="form-control" placeholder="Kullanıcı adınızı belirleyin" required>
+                        <input type="text" asp-for="UserName" class="form-control" placeholder="Kullanıcı adınızı giriniz" required>
                     </div>
                 </div>
 
-                <div class="form-group">
-                    <label>E-posta Adresi</label>
-                    <div class="input-group-custom">
-                        <i class="fas fa-envelope"></i>
-                        <input type="email" asp-for="Email" class="form-control" placeholder="ornek@email.com" required>
-                    </div>
-                </div>
 
                 <div class="form-group">
-                    <label>Şifre</label>
+                    <label>Şifreniz</label>
                     <div class="input-group-custom">
                         <i class="fas fa-lock"></i>
-                        <input type="password" asp-for="Password" class="form-control" placeholder="Güçlü bir şifre oluşturun" required>
+                        <input type="password" asp-for="Password" class="form-control" placeholder="***********" required>
                     </div>
                 </div>
 
                 <div class="text-danger" asp-validation-summary="ModelOnly"></div>
 
                 <button type="submit" class="btn-register">
-                    <i class="fas fa-user-plus"></i> Kayıt Ol
+                    <i class="fas fa-user-plus"></i> Giriş Yap
                 </button>
 
                 <div class="login-link">
-                    Zaten hesabınız var mı? <a href="/Login/UserLogin/">Giriş Yapın</a>
+                    Hesabınız Yok mu? <a href="/Register/CreateUser/">Hemen Kayıt Olun</a>
                 </div>
             </form>
         </div>

@@ -1,5 +1,6 @@
 using IdentityEmail.Context;
 using IdentityEmail.Entities;
+using IdentityEmail.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,13 +9,7 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddDbContext<EmailContext>();
 
-builder.Services.AddIdentity<AppUser, AppRole>(x =>
-{
-    x.Password.RequireUppercase = false;
-    x.Password.RequireNonAlphanumeric = false;
-})
-
-.AddEntityFrameworkStores<EmailContext>();
+builder.Services.AddIdentity<AppUser, AppRole>().AddEntityFrameworkStores<EmailContext>().AddErrorDescriber<CustomIdentityValidator>();
 
 var app = builder.Build();
 
@@ -28,6 +23,8 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseRouting();
+
+app.UseAuthentication();
 
 app.UseAuthorization();
 
