@@ -1,24 +1,366 @@
-﻿@model UserEditDto
+@model UserEditDto
 @{
-    Layout = null;
+    ViewData["Title"] = "UserProfile";
+    Layout = "~/Views/Shared/_UserLayout.cshtml";
 }
 
-<link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+<style>
+    .profile-dark-wrapper {
+        background-color: #030712;
+        min-height: 100vh;
+    }
 
-<div class="container">
-    <form method="post" enctype="multipart/form-data">
-        <input type="text" asp-for="Name" placeholder="Adınız" class="form-control" />
-        <br />
-        <input type="text" asp-for="Surname" placeholder="Soyadınız" class="form-control" />
-        <br />
-        <input type="text" asp-for="Email" placeholder="Email Adresiniz" class="form-control" />
-        <br />
-        <input type="password" asp-for="Password" placeholder="*****" class="form-control" />
-        <br />
-        <input type="password" asp-for="ConfirmPassword" placeholder="*****" class="form-control" />
-        <br />
-        <input type="file" asp-for="Image" class="form-control" />
-        <br />
-        <button class="btn btn-primary">Değişiklikleri Kaydet</button>
-    </form>
+    .profile-dark-wrapper .page-breadcrumb {
+        background: linear-gradient(90deg, #030712 0%, #020617 40%, #030712 100%);
+        border-bottom: 1px solid rgba(148, 163, 184, 0.25);
+    }
+
+    .profile-dark-wrapper .page-title,
+    .profile-dark-wrapper .breadcrumb .breadcrumb-item a,
+    .profile-dark-wrapper .breadcrumb .breadcrumb-item.active,
+    .profile-dark-wrapper .breadcrumb-item + .breadcrumb-item::before {
+        color: #e5e7eb;
+    }
+
+    .profile-dark-wrapper small.text-muted {
+        color: #9ca3af !important;
+    }
+
+    .profile-card {
+        border-radius: 1rem;
+        overflow: hidden;
+        box-shadow: 0 10px 30px rgba(15, 23, 42, 0.7);
+        background: radial-gradient(circle at top left, #111827, #030712);
+        border: 1px solid rgba(55, 65, 81, 0.8);
+    }
+
+    .profile-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 1.5rem 2rem;
+        border-bottom: 1px solid rgba(55, 65, 81, 0.9);
+        background: linear-gradient(90deg, #020617 0%, #0b1120 40%, #020617 100%);
+    }
+
+    .profile-header-content h4 {
+        font-size: 1.35rem;
+        font-weight: 600;
+        color: #e5e7eb;
+        margin-bottom: 0.25rem;
+    }
+
+    .profile-header-content span {
+        font-size: 0.85rem;
+        color: #9ca3af;
+    }
+
+    .profile-header-icon {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #818cf8, #ec4899);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.75rem;
+        color: #fff;
+    }
+
+    .profile-body {
+        padding: 2rem 2rem 2.5rem;
+    }
+
+    .profile-section {
+        margin-bottom: 2rem;
+    }
+
+    .profile-section-title {
+        font-size: 0.8rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: #818cf8;
+        margin-bottom: 1.25rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 2px solid rgba(129, 140, 248, 0.3);
+    }
+
+    .profile-form-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+        margin-bottom: 1rem;
+    }
+
+    .profile-form-group {
+        margin-bottom: 1.25rem;
+    }
+
+    .profile-label {
+        display: block;
+        font-size: 0.8rem;
+        font-weight: 500;
+        color: #9ca3af;
+        margin-bottom: 0.5rem;
+        text-transform: uppercase;
+        letter-spacing: 0.03em;
+    }
+
+    .profile-input {
+        width: 100%;
+        background-color: rgba(15, 23, 42, 0.85);
+        border: 1px solid rgba(55, 65, 81, 0.9);
+        border-radius: 0.5rem;
+        color: #e5e7eb;
+        padding: 0.75rem 1rem;
+        font-size: 0.95rem;
+        transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .profile-input:focus {
+        outline: none;
+        border-color: rgba(129, 140, 248, 0.7);
+        box-shadow: 0 0 0 3px rgba(129, 140, 248, 0.15);
+        background-color: rgba(15, 23, 42, 0.95);
+    }
+
+    .profile-input::placeholder {
+        color: #6b7280;
+    }
+
+    .profile-input[type="file"] {
+        padding: 0.6rem 1rem;
+        cursor: pointer;
+    }
+
+    .profile-input[type="file"]::file-selector-button {
+        background: rgba(129, 140, 248, 0.2);
+        border: 1px solid rgba(129, 140, 248, 0.5);
+        color: #c7d2fe;
+        padding: 0.4rem 1rem;
+        border-radius: 0.375rem;
+        cursor: pointer;
+        margin-right: 0.75rem;
+        transition: all 0.2s ease;
+    }
+
+    .profile-input[type="file"]::file-selector-button:hover {
+        background: rgba(129, 140, 248, 0.35);
+        border-color: #818cf8;
+    }
+
+    .profile-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+        margin-top: 2rem;
+        padding-top: 1.75rem;
+        border-top: 1px dashed rgba(55, 65, 81, 0.9);
+    }
+
+    .profile-btn {
+        border-radius: 999px;
+        padding: 0.7rem 2rem;
+        font-weight: 600;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        border: none;
+        font-size: 0.95rem;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    .profile-btn-save {
+        background: linear-gradient(90deg, #22c55e, #16a34a);
+        color: #ecfdf5;
+        box-shadow: 0 8px 18px rgba(22, 163, 74, 0.45);
+    }
+
+    .profile-btn-save:hover {
+        color: #ecfdf5;
+        box-shadow: 0 10px 24px rgba(22, 163, 74, 0.6);
+        transform: translateY(-2px);
+    }
+
+    .profile-btn-cancel {
+        background: rgba(15, 23, 42, 0.9);
+        color: #e5e7eb;
+        border: 1px solid rgba(55, 65, 81, 0.9);
+    }
+
+    .profile-btn-cancel:hover {
+        background: rgba(30, 64, 175, 0.9);
+        color: #e5e7eb;
+        border-color: rgba(129, 140, 248, 0.7);
+    }
+
+    .profile-info-box {
+        background: rgba(129, 140, 248, 0.1);
+        border: 1px solid rgba(129, 140, 248, 0.3);
+        border-radius: 0.5rem;
+        padding: 1rem 1.25rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .profile-info-box p {
+        margin: 0;
+        font-size: 0.85rem;
+        color: #c7d2fe;
+        line-height: 1.5;
+    }
+
+    .profile-info-box i {
+        color: #818cf8;
+        margin-right: 0.5rem;
+    }
+
+    @@media (max-width: 768px) {
+        .profile-form-row {
+            grid-template-columns: 1fr;
+        }
+        
+        .profile-header {
+            flex-direction: column;
+            text-align: center;
+            gap: 1rem;
+        }
+    }
+</style>
+
+<div class="page-wrapper profile-dark-wrapper">
+    <div class="page-breadcrumb">
+        <div class="row">
+            <div class="col-12 d-flex align-items-center justify-content-between">
+                <div>
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb mb-1">
+                            <li class="breadcrumb-item">
+                                <a href="/Dashboard/Index" class="link">Dashboard</a>
+                            </li>
+                            <li class="breadcrumb-item active" aria-current="page">Profil</li>
+                        </ol>
+                    </nav>
+                    <h4 class="page-title mb-0">Kullanıcı Profili</h4>
+                    <small class="text-muted">
+                        Hesap bilgilerinizi düzenleyin
+                    </small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid">
+        <div class="row justify-content-center">
+            <div class="col-lg-10 col-xl-8">
+                <div class="profile-card">
+                    <div class="profile-header">
+                        <div class="profile-header-content">
+                            <h4>Profil Ayarları</h4>
+                            <span>Kişisel bilgilerinizi güncelleyin</span>
+                        </div>
+                        <div class="profile-header-icon">
+                            <i class="mdi mdi-account-circle"></i>
+                        </div>
+                    </div>
+
+                    <div class="profile-body">
+                        <div class="profile-info-box">
+                            <p>
+                                <i class="mdi mdi-information"></i>
+                                Profil bilgilerinizi güncelledikten sonra değişikliklerin etkili olması için kaydet butonuna basınız.
+                            </p>
+                        </div>
+
+                        <form method="post" enctype="multipart/form-data">
+                            <div class="profile-section">
+                                <h5 class="profile-section-title">
+                                    <i class="mdi mdi-account mr-2"></i>Kişisel Bilgiler
+                                </h5>
+
+                                <div class="profile-form-row">
+                                    <div class="profile-form-group">
+                                        <label class="profile-label">Adınız</label>
+                                        <input type="text" 
+                                               asp-for="Name" 
+                                               class="profile-input"
+                                               placeholder="Adınızı girin"
+                                               required>
+                                    </div>
+
+                                    <div class="profile-form-group">
+                                        <label class="profile-label">Soyadınız</label>
+                                        <input type="text" 
+                                               asp-for="Surname" 
+                                               class="profile-input"
+                                               placeholder="Soyadınızı girin"
+                                               required>
+                                    </div>
+                                </div>
+
+                                <div class="profile-form-group">
+                                    <label class="profile-label">E-posta Adresi</label>
+                                    <input type="email" 
+                                           asp-for="Email" 
+                                           class="profile-input"
+                                           placeholder="email@example.com"
+                                           required>
+                                </div>
+                            </div>
+
+                            <div class="profile-section">
+                                <h5 class="profile-section-title">
+                                    <i class="mdi mdi-lock mr-2"></i>Güvenlik
+                                </h5>
+
+                                <div class="profile-form-row">
+                                    <div class="profile-form-group">
+                                        <label class="profile-label">Yeni Şifre</label>
+                                        <input type="password" 
+                                               asp-for="Password" 
+                                               class="profile-input"
+                                               placeholder="••••••••">
+                                    </div>
+
+                                    <div class="profile-form-group">
+                                        <label class="profile-label">Şifre Tekrar</label>
+                                        <input type="password" 
+                                               asp-for="ConfirmPassword" 
+                                               class="profile-input"
+                                               placeholder="••••••••">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="profile-section">
+                                <h5 class="profile-section-title">
+                                    <i class="mdi mdi-image mr-2"></i>Profil Fotoğrafı
+                                </h5>
+
+                                <div class="profile-form-group">
+                                    <label class="profile-label">Fotoğraf Seçin</label>
+                                    <input type="file" 
+                                           asp-for="Image" 
+                                           class="profile-input"
+                                           accept="image/*">
+                                </div>
+                            </div>
+
+                            <div class="profile-actions">
+                                <button type="submit" class="profile-btn profile-btn-save">
+                                    <i class="mdi mdi-content-save"></i>
+                                    Değişiklikleri Kaydet
+                                </button>
+                                <a href="/Dashboard/Index" class="profile-btn profile-btn-cancel">
+                                    <i class="mdi mdi-close"></i>
+                                    İptal
+                                </a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

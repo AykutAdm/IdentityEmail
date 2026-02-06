@@ -1,0 +1,298 @@
+@model SentMessage
+@{
+    ViewData["Title"] = "SentMessageDetail";
+    Layout = "~/Views/Shared/_UserLayout.cshtml";
+}
+
+<style>
+    .message-dark-wrapper {
+        background-color: #030712;
+        min-height: 100vh;
+    }
+
+    .message-dark-wrapper .page-breadcrumb {
+        background: linear-gradient(90deg, #030712 0%, #020617 40%, #030712 100%);
+        border-bottom: 1px solid rgba(148, 163, 184, 0.25);
+    }
+
+    .message-dark-wrapper .page-title,
+    .message-dark-wrapper .breadcrumb .breadcrumb-item a,
+    .message-dark-wrapper .breadcrumb .breadcrumb-item.active,
+    .message-dark-wrapper .breadcrumb-item + .breadcrumb-item::before {
+        color: #e5e7eb;
+    }
+
+    .message-dark-wrapper small.text-muted {
+        color: #9ca3af !important;
+    }
+
+    .message-detail-card {
+        border-radius: 1rem;
+        overflow: hidden;
+        box-shadow: 0 10px 30px rgba(15, 23, 42, 0.7);
+        background: radial-gradient(circle at top left, #111827, #030712);
+        border: 1px solid rgba(55, 65, 81, 0.8);
+    }
+
+    .message-detail-toolbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 1rem 1.25rem;
+        border-bottom: 1px solid rgba(55, 65, 81, 0.9);
+        background: linear-gradient(90deg, #020617 0%, #0b1120 40%, #020617 100%);
+    }
+
+    .message-detail-header {
+        padding: 1rem 1.25rem 0.75rem;
+    }
+
+    .message-detail-title {
+        font-size: 1.125rem;
+        font-weight: 600;
+        color: #e5e7eb;
+        margin-bottom: 0.35rem;
+    }
+
+    .message-detail-meta {
+        font-size: 0.85rem;
+        color: #9ca3af;
+    }
+
+    .message-detail-addresses {
+        padding: 0.5rem 1.25rem 0.75rem;
+        border-top: 1px solid rgba(55, 65, 81, 0.9);
+        border-bottom: 1px solid rgba(55, 65, 81, 0.9);
+        background-color: #030712;
+    }
+
+    .message-detail-addresses strong {
+        color: #e5e7eb;
+    }
+
+    .message-detail-body {
+        padding: 1.25rem 1.5rem 1.75rem;
+    }
+
+    .message-detail-text {
+        white-space: pre-wrap;
+        font-size: 0.95rem;
+        line-height: 1.6;
+        color: #e5e7eb;
+        text-align: left;
+    }
+
+    .message-detail-footer {
+        padding: 1rem 1.25rem 1.25rem;
+        border-top: 1px dashed rgba(55, 65, 81, 0.9);
+        background-color: #030712;
+        font-size: 0.85rem;
+    }
+
+    .message-detail-footer a {
+        font-weight: 500;
+    }
+
+    .message-detail-chip-group {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.35rem;
+        align-items: center;
+    }
+
+    .message-detail-badge-status {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0.2rem 0.8rem;
+        border-radius: 999px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        white-space: nowrap;
+    }
+
+    .message-detail-badge-read {
+        background-color: rgba(34, 197, 94, 0.25);
+        color: #86efac;
+    }
+
+    .message-detail-badge-unread {
+        background-color: rgba(148, 163, 184, 0.25);
+        color: #cbd5e1;
+    }
+
+    .message-detail-toolbar .btn {
+        border-radius: 999px;
+        border: none;
+    }
+
+    .message-detail-toolbar .btn-light {
+        background-color: rgba(15, 23, 42, 0.7);
+        color: #e5e7eb;
+    }
+
+    .message-detail-toolbar .btn-light:hover {
+        background-color: rgba(30, 64, 175, 0.9);
+        color: #ffffff;
+    }
+
+    .message-detail-delete-btn {
+        background-color: rgba(239, 68, 68, 0.9);
+        color: #fef2f2;
+        padding: 0.35rem 0.95rem;
+    }
+
+    .message-detail-delete-btn:hover {
+        background-color: rgba(220, 38, 38, 1);
+        color: #ffffff;
+    }
+
+    .sent-info-box {
+        background: linear-gradient(135deg, rgba(129, 140, 248, 0.12), rgba(236, 72, 153, 0.12));
+        border: 1px solid rgba(129, 140, 248, 0.3);
+        border-radius: 0.5rem;
+        padding: 1rem 1.25rem;
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .sent-info-box i {
+        font-size: 2rem;
+        color: #818cf8;
+    }
+
+    .sent-info-box p {
+        margin: 0;
+        color: #c7d2fe;
+        font-size: 0.85rem;
+    }
+</style>
+
+<div class="page-wrapper message-dark-wrapper">
+    <div class="page-breadcrumb">
+        <div class="row">
+            <div class="col-12 d-flex align-items-center justify-content-between">
+                <div>
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb mb-1">
+                            <li class="breadcrumb-item">
+                                <a href="/Message/SentMessage" class="link">Gönderilen Mesajlar</a>
+                            </li>
+                            <li class="breadcrumb-item active" aria-current="page">Mesaj Detayı</li>
+                        </ol>
+                    </nav>
+                    <h4 class="page-title mb-0">@Model.Subject</h4>
+                    <small class="text-muted">
+                        @Model.SendDate.ToString("dd.MM.yyyy HH:mm")
+                    </small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid">
+        <div class="row justify-content-center">
+            <div class="col-lg-10 col-xl-8">
+                <div class="right-part mail-details">
+                    <div class="card message-detail-card bg-white">
+                        <div class="message-detail-toolbar">
+                            <div class="d-flex align-items-center">
+                                <a href="/Message/SentMessage" class="btn btn-light btn-circle mr-2" title="Gönderilenlere dön">
+                                    <i class="mdi mdi-arrow-left text-secondary"></i>
+                                </a>
+                                <span class="text-muted small">Gönderilen Mesaj Detayı</span>
+                            </div>
+                            <div class="btn-group" role="group" aria-label="Message actions">
+                                <button type="button" class="btn btn-light btn-sm" title="Yeniden gönder">
+                                    <i class="mdi mdi-send"></i>
+                                </button>
+                                <button type="button" class="btn message-detail-delete-btn btn-sm" title="Sil">
+                                    <i class="mdi mdi-delete"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="message-detail-header">
+                            <div class="d-flex justify-content-between align-items-start flex-wrap">
+                                <div class="mb-2 mb-sm-0">
+                                    <div class="message-detail-title">@Model.Subject</div>
+                                    <div class="message-detail-meta">
+                                        @Model.SendDate.ToString("dd MMMM yyyy HH:mm")
+                                    </div>
+                                </div>
+                                <div class="message-detail-chip-group">
+                                    @if (Model.IsRead)
+                                    {
+                                        <span class="message-detail-badge-status message-detail-badge-read">
+                                            <i class="mdi mdi-check-circle mr-1"></i> Okundu
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="message-detail-badge-status message-detail-badge-unread">
+                                            <i class="mdi mdi-circle-outline mr-1"></i> Okunmadı
+                                        </span>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="message-detail-addresses">
+                            <div class="d-flex flex-column flex-sm-row align-items-sm-center justify-content-between">
+                                <div>
+                                    <strong>@Model.SenderEmail</strong>
+                                    <span class="text-muted"> → </span>
+                                    <span class="text-muted">to</span>
+                                    <span class="ml-1">@Model.ReceiverEmail</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="message-detail-body">
+                            @if (Model.IsRead)
+                            {
+                                <div class="sent-info-box">
+                                    <i class="mdi mdi-email-check"></i>
+                                    <div>
+                                        <strong style="color: #86efac;">Bu mesaj alıcı tarafından okundu</strong>
+                                        <p class="mt-1">Mesajınız başarıyla iletildi ve alıcı tarafından görüntülendi.</p>
+                                    </div>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="sent-info-box">
+                                    <i class="mdi mdi-email-outline"></i>
+                                    <div>
+                                        <strong style="color: #cbd5e1;">Bu mesaj henüz okunmadı</strong>
+                                        <p class="mt-1">Mesajınız iletildi ancak alıcı tarafından henüz görüntülenmedi.</p>
+                                    </div>
+                                </div>
+                            }
+
+                            <div class="message-detail-text" id="messageContent">
+                                @Html.Raw(Model.MessageDetail)
+                            </div>
+                        </div>
+
+                        <div class="message-detail-footer">
+                            <p class="mb-1 text-muted">
+                                Bu mesajı <strong>@Model.SendDate.ToString("dd.MM.yyyy HH:mm")</strong> tarihinde göndermişsiniz.
+                            </p>
+                            <div class="mt-2">
+                                <a href="/Message/SendMessage" class="mr-3">
+                                    <i class="mdi mdi-plus-circle mr-1"></i>Yeni Mesaj
+                                </a>
+                                <a href="/Message/SentMessage">
+                                    <i class="mdi mdi-send mr-1"></i>Gönderilenlere Dön
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

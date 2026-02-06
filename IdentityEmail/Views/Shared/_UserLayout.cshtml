@@ -1,0 +1,26 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html dir="ltr" lang="en">
+
+@await Component.InvokeAsync("_UserLayoutHeadComponentPartial")
+
+<body>
+   
+    <div id="main-wrapper">
+
+        @await Component.InvokeAsync("_UserLayoutTopbarComponentPartial")
+
+        @await Component.InvokeAsync("_UserLayoutSidebarComponentPartial")
+
+        @RenderBody()
+
+    </div>
+
+    @await Component.InvokeAsync("_UserLayoutScriptsComponentPartial")
+
+</body>
+
+</html>

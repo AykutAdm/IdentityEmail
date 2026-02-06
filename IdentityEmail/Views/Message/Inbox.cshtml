@@ -1,0 +1,355 @@
+@model List<Message>
+@{
+    ViewData["Title"] = "Inbox";
+    Layout = "~/Views/Shared/_UserLayout.cshtml";
+}
+
+<style>
+    .message-dark-wrapper {
+        background-color: #030712;
+        min-height: 100vh;
+    }
+
+    .message-dark-wrapper .page-breadcrumb {
+        background: linear-gradient(90deg, #030712 0%, #020617 40%, #030712 100%);
+        border-bottom: 1px solid rgba(148, 163, 184, 0.25);
+    }
+
+    .message-dark-wrapper .page-title,
+    .message-dark-wrapper .breadcrumb .breadcrumb-item a,
+    .message-dark-wrapper .breadcrumb .breadcrumb-item.active,
+    .message-dark-wrapper .breadcrumb-item + .breadcrumb-item::before {
+        color: #e5e7eb;
+    }
+
+    .message-dark-wrapper small.text-muted {
+        color: #9ca3af !important;
+    }
+
+    .message-dark-wrapper .card {
+        background-color: #030712;
+        border-color: rgba(148, 163, 184, 0.35);
+    }
+
+    .message-dark-wrapper .list-group-item {
+        background-color: transparent;
+        color: #e5e7eb;
+        border-color: rgba(30, 64, 175, 0.5);
+    }
+
+    .message-dark-wrapper .list-group-item.active {
+        background: linear-gradient(90deg, #4f46e5, #ec4899);
+        border-color: transparent;
+    }
+
+    .message-dark-wrapper .badge-outline-secondary {
+        border-color: rgba(148, 163, 184, 0.7);
+        color: #cbd5f5;
+    }
+
+    .email-table {
+        font-size: 0.875rem;
+    }
+
+    .email-table thead th {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        color: #99a1b7;
+        border-bottom: 0;
+        background-color: transparent;
+        white-space: nowrap;
+    }
+
+    .email-table tbody tr {
+        transition: background-color 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .email-table tbody tr:hover {
+        background-color: #030712;
+        box-shadow: 0 2px 12px rgba(15, 23, 42, 0.6);
+    }
+
+    .email-cell {
+        vertical-align: middle !important;
+        padding-top: 0.75rem;
+        padding-bottom: 0.75rem;
+    }
+
+    .email-sender {
+        font-weight: 600;
+        color: #e5e7eb;
+        max-width: 180px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .email-snippet {
+        font-size: 0.875rem;
+        color: #9ca3af;
+        max-width: 340px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .email-date {
+        white-space: nowrap;
+        font-size: 0.8rem;
+        color: #9ca3af;
+    }
+
+    .email-badge-category,
+    .email-badge-priority {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0.15rem 0.7rem;
+        border-radius: 999px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        white-space: nowrap;
+    }
+
+    .email-badge-category {
+        background-color: rgba(129, 140, 248, 0.25);
+        color: #c7d2fe;
+    }
+
+    .email-badge-priority {
+        background-color: rgba(248, 113, 113, 0.25);
+        color: #fecaca;
+    }
+
+    .email-actions {
+        gap: 0.35rem;
+    }
+
+    .email-action-btn {
+        width: 40px;
+        height: 40px;
+        border-radius: 999px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border: none;
+        font-size: 1rem;
+        transition: background-color 0.15s ease, transform 0.1s ease, box-shadow 0.15s ease;
+        line-height: 1;
+    }
+
+    .email-action-view {
+        background-color: rgba(129, 140, 248, 0.35);
+        color: #e0e7ff;
+    }
+
+    .email-action-delete {
+        background-color: rgba(239, 68, 68, 0.45);
+        color: #fee2e2;
+    }
+
+    .email-action-btn:hover {
+        text-decoration: none;
+        transform: translateY(-1px);
+        box-shadow: 0 2px 6px rgba(15, 23, 42, 0.12);
+    }
+</style>
+
+<div class="page-wrapper message-dark-wrapper">
+    <div class="page-breadcrumb">
+        <div class="row">
+            <div class="col-12 d-flex align-items-center justify-content-between">
+                <div>
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb mb-1">
+                            <li class="breadcrumb-item">
+                                <a href="/" class="link">Home</a>
+                            </li>
+                            <li class="breadcrumb-item active" aria-current="page">Mailbox</li>
+                        </ol>
+                    </nav>
+                    <h4 class="page-title mb-0">Gelen Kutusu</h4>
+                    <small class="text-muted">
+                        Toplam @Model.Count mesaj
+                    </small>
+                </div>
+                <div>
+                    <a href="/Message/SendMessage" class="btn btn-primary">
+                        <i class="mdi mdi-plus mr-1"></i> Yeni Mesaj
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sol menü -->
+            <div class="col-lg-3 col-md-4 mb-4">
+                <div class="card shadow-sm border-0 h-100">
+                    <div class="card-body p-0">
+                        <button class="btn btn-block btn-primary rounded-0 py-3 font-weight-medium">
+                            <i class="mdi mdi-pencil mr-1"></i> Yeni E‑posta
+                        </button>
+
+                        <div class="list-group list-group-flush mt-2">
+                            <div class="px-3 pt-2 pb-1 text-uppercase small text-muted font-weight-semibold">
+                                Klasörler
+                            </div>
+                            <a href="javascript:void(0)" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center active">
+                                <span><i class="mdi mdi-inbox mr-2"></i> Gelen Kutusu</span>
+                                <span class="badge badge-light">@Model.Count</span>
+                            </a>
+                            <a href="javascript:void(0)" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                                <span><i class="mdi mdi-star-outline mr-2"></i> Yıldızlı</span>
+                                <span class="badge badge-outline-secondary">0</span>
+                            </a>
+                            <a href="javascript:void(0)" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                                <span><i class="mdi mdi-file-document-box-outline mr-2"></i> Taslaklar</span>
+                                <span class="badge badge-outline-secondary">0</span>
+                            </a>
+                            <a href="javascript:void(0)" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                                <span><i class="mdi mdi-send mr-2"></i> Gönderilenler</span>
+                                <span class="badge badge-outline-secondary">0</span>
+                            </a>
+
+                            <div class="px-3 pt-3 pb-1 text-uppercase small text-muted font-weight-semibold">
+                                Etiketler
+                            </div>
+                            <a href="javascript:void(0)" class="list-group-item list-group-item-action">
+                                <i class="mdi mdi-checkbox-blank-circle text-danger mr-2"></i> İş
+                            </a>
+                            <a href="javascript:void(0)" class="list-group-item list-group-item-action">
+                                <i class="mdi mdi-checkbox-blank-circle text-info mr-2"></i> İşletme
+                            </a>
+                            <a href="javascript:void(0)" class="list-group-item list-group-item-action">
+                                <i class="mdi mdi-checkbox-blank-circle text-warning mr-2"></i> Aile
+                            </a>
+                            <a href="javascript:void(0)" class="list-group-item list-group-item-action">
+                                <i class="mdi mdi-checkbox-blank-circle text-success mr-2"></i> Arkadaşlar
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sağ kısım / mesaj listesi -->
+            <div class="col-lg-9 col-md-8">
+                <div class="card shadow-sm border-0">
+                    <div class="card-body border-bottom py-3 d-flex flex-wrap align-items-center">
+                        <div class="custom-control custom-checkbox mr-3">
+                            <input type="checkbox" class="custom-control-input" id="selectAll">
+                            <label class="custom-control-label" for="selectAll">Tümünü seç</label>
+                        </div>
+
+                        <div class="input-group input-group-sm ml-auto" style="max-width: 260px;">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text bg-light border-right-0">
+                                    <i class="mdi mdi-magnify"></i>
+                                </span>
+                            </div>
+                            <input type="text" class="form-control border-left-0" placeholder="Gelen kutusunda ara...">
+                        </div>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="table table-hover table-borderless align-middle mb-0 email-table">
+                            <thead class="thead-light">
+                                <tr>
+                                    <th style="width:40px;"></th>
+                                    <th style="width:40px;"></th>
+                                    <th>Gönderen</th>
+                                    <th style="width:140px;">Kategori</th>
+                                    <th style="width:110px;">Öncelik</th>
+                                    <th>Mesaj</th>
+                                    <th style="width:120px;">Tarih</th>
+                                    <th style="width:160px;" class="text-right">İşlemler</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (!Model.Any())
+                                {
+                                    <tr>
+                                        <td colspan="6" class="text-center text-muted py-5">
+                                            Gelen kutusunda mesaj bulunmuyor.
+                                        </td>
+                                    </tr>
+                                }
+                                else
+                                {
+                                    foreach (var item in Model.OrderByDescending(x => x.SendDate))
+                                    {
+                                        <tr>
+                                            <td class="email-cell">
+                                                <div class="custom-control custom-checkbox">
+                                                    <input type="checkbox" class="custom-control-input" id="msg-@item.MessageId">
+                                                    <label class="custom-control-label" for="msg-@item.MessageId"></label>
+                                                </div>
+                                            </td>
+                                            <td class="text-center email-cell">
+                                                <i class="far fa-star text-muted"></i>
+                                            </td>
+                                            <td class="email-cell">
+                                                <span class="email-sender" title="@item.SenderEmail">
+                                                @item.SenderEmail
+                                                </span>
+                                            </td>
+                                            <td class="email-cell">
+                                                <span class="email-badge-category">
+                                                    Kategori
+                                                </span>
+                                            </td>
+                                            <td class="email-cell">
+                                                <span class="email-badge-priority">
+                                                    Öncelik
+                                                </span>
+                                            </td>
+                                            <td class="email-cell">
+                                                <span class="email-snippet" title="@item.MessageDetail">
+                                                    @item.MessageDetail
+                                                </span>
+                                            </td>
+                                            <td class="email-cell email-date">
+                                                @item.SendDate.ToString("dd.MM.yyyy")
+                                            </td>
+                                            <td class="text-right email-cell">
+                                                <div class="d-inline-flex email-actions">
+                                                    <a href="/Message/MessageDetail/@item.MessageId"
+                                                       class="email-action-btn email-action-view"
+                                                       title="Mesaj detayı">
+                                                        <i class="mdi mdi-email-open-outline"></i>
+                                                    </a>
+                                                    <a href="/Message/MessageDelete/@item.MessageId"
+                                                       class="email-action-btn email-action-delete"
+                                                       title="Sil">
+                                                        <i class="mdi mdi-delete"></i>
+                                                    </a>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="card-footer d-flex justify-content-between align-items-center">
+                        <span class="text-muted small">
+                            @Model.Count mesaj listeleniyor
+                        </span>
+                        <nav aria-label="Page navigation">
+                            <ul class="pagination pagination-sm mb-0">
+                                <li class="page-item disabled"><a class="page-link" href="javascript:void(0)">Önceki</a></li>
+                                <li class="page-item active"><a class="page-link" href="javascript:void(0)">1</a></li>
+                                <li class="page-item"><a class="page-link" href="javascript:void(0)">2</a></li>
+                                <li class="page-item"><a class="page-link" href="javascript:void(0)">3</a></li>
+                                <li class="page-item"><a class="page-link" href="javascript:void(0)">Sonraki</a></li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

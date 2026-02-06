@@ -12,5 +12,6 @@ namespace IdentityEmail.Context
         }
 
         public DbSet<Message> Messages { get; set; }
+        public DbSet<SentMessage> SentMessages { get; set; }
     }
 }

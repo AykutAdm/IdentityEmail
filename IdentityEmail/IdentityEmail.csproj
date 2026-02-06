@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="MailKit" Version="4.14.1" />
     <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.3.9" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="9.0.12" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.12" />
@@ -24,6 +25,12 @@
 
   <ItemGroup>
     <Folder Include="wwwroot\ImageFiles\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\mendy-admin\.DS_Store" />
+    <None Include="wwwroot\mendy-admin\docs\.DS_Store" />
+    <None Include="wwwroot\mendy-admin\package\.DS_Store" />
   </ItemGroup>
 
 </Project>

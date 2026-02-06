@@ -24,13 +24,13 @@ namespace IdentityEmail.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateUser(CreateUserRegisterDto createUserRegisterDto)
         {
-
             AppUser appUser = new AppUser()
             {
                 Name = createUserRegisterDto.Name,
                 Surname = createUserRegisterDto.Surname,
                 Email = createUserRegisterDto.Email,
                 UserName = createUserRegisterDto.UserName
+
             };
 
             var result = await _userManager.CreateAsync(appUser, createUserRegisterDto.Password);

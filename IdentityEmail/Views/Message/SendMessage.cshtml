@@ -1,0 +1,366 @@
+@model Message
+@{
+    ViewData["Title"] = "SendMessage";
+    Layout = "~/Views/Shared/_UserLayout.cshtml";
+}
+
+
+<head>
+    <meta charset="UTF-8">
+    <title>without bootstrap</title>
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/summernote@0.9.0/dist/summernote-lite.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/summernote@0.9.0/dist/summernote-lite.min.js"></script>
+</head>
+
+
+<style>
+    .compose-dark-wrapper {
+        background-color: #030712;
+        min-height: 100vh;
+    }
+
+    .compose-dark-wrapper .page-breadcrumb {
+        background: linear-gradient(90deg, #030712 0%, #020617 40%, #030712 100%);
+        border-bottom: 1px solid rgba(148, 163, 184, 0.25);
+    }
+
+    .compose-dark-wrapper .page-title,
+    .compose-dark-wrapper .breadcrumb .breadcrumb-item a,
+    .compose-dark-wrapper .breadcrumb .breadcrumb-item.active,
+    .compose-dark-wrapper .breadcrumb-item + .breadcrumb-item::before {
+        color: #e5e7eb;
+    }
+
+    .compose-dark-wrapper small.text-muted {
+        color: #9ca3af !important;
+    }
+
+    .compose-card {
+        border-radius: 1rem;
+        overflow: hidden;
+        box-shadow: 0 10px 30px rgba(15, 23, 42, 0.7);
+        background: radial-gradient(circle at top left, #111827, #030712);
+        border: 1px solid rgba(55, 65, 81, 0.8);
+    }
+
+    .compose-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 1.25rem 1.5rem;
+        border-bottom: 1px solid rgba(55, 65, 81, 0.9);
+        background: linear-gradient(90deg, #020617 0%, #0b1120 40%, #020617 100%);
+    }
+
+    .compose-header h4 {
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: #e5e7eb;
+        margin-bottom: 0.15rem;
+    }
+
+    .compose-header span {
+        font-size: 0.85rem;
+        color: #9ca3af;
+    }
+
+    .compose-body {
+        padding: 1.75rem 1.5rem 2rem;
+    }
+
+    .compose-form-group {
+        margin-bottom: 1.25rem;
+    }
+
+    .compose-label {
+        display: block;
+        font-size: 0.8rem;
+        font-weight: 500;
+        color: #9ca3af;
+        margin-bottom: 0.4rem;
+        text-transform: uppercase;
+        letter-spacing: 0.03em;
+    }
+
+    .compose-input {
+        width: 100%;
+        background-color: rgba(15, 23, 42, 0.85);
+        border: 1px solid rgba(55, 65, 81, 0.9);
+        border-radius: 0.5rem;
+        color: #e5e7eb;
+        padding: 0.65rem 1rem;
+        font-size: 0.95rem;
+        transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .compose-input:focus {
+        outline: none;
+        border-color: rgba(129, 140, 248, 0.7);
+        box-shadow: 0 0 0 3px rgba(129, 140, 248, 0.15);
+        background-color: rgba(15, 23, 42, 0.95);
+    }
+
+    .compose-input::placeholder {
+        color: #6b7280;
+    }
+
+    /* Summernote dark theme */
+    .compose-dark-wrapper .note-editor.note-frame {
+        background-color: rgba(15, 23, 42, 0.85);
+        border: 1px solid rgba(55, 65, 81, 0.9);
+        border-radius: 0.5rem;
+        color: #e5e7eb;
+    }
+
+    .compose-dark-wrapper .note-toolbar {
+        background-color: rgba(15, 23, 42, 0.95);
+        border-bottom: 1px solid rgba(55, 65, 81, 0.9);
+        padding: 0.5rem;
+    }
+
+    .compose-dark-wrapper .note-btn-group .note-btn {
+        background-color: rgba(30, 41, 59, 0.8);
+        border: 1px solid rgba(75, 85, 99, 0.6);
+        color: #e5e7eb;
+    }
+
+    .compose-dark-wrapper .note-btn-group .note-btn:hover {
+        background-color: rgba(55, 65, 81, 0.9);
+        border-color: rgba(129, 140, 248, 0.7);
+    }
+
+    .compose-dark-wrapper .note-editable {
+        background-color: rgba(15, 23, 42, 0.85);
+        color: #e5e7eb;
+        min-height: 280px;
+        padding: 1rem;
+    }
+
+    .compose-dark-wrapper .note-editable:focus {
+        background-color: rgba(15, 23, 42, 0.95);
+    }
+
+    .compose-dark-wrapper .note-statusbar {
+        background-color: rgba(15, 23, 42, 0.95);
+        border-top: 1px solid rgba(55, 65, 81, 0.9);
+    }
+
+    .compose-dark-wrapper .dropdown-menu {
+        background-color: #1e293b;
+        border: 1px solid rgba(55, 65, 81, 0.9);
+    }
+
+    .compose-dark-wrapper .dropdown-item {
+        color: #e5e7eb;
+    }
+
+    .compose-dark-wrapper .dropdown-item:hover {
+        background-color: rgba(55, 65, 81, 0.9);
+    }
+
+    /* Attachment area */
+    .compose-attachment {
+        margin-top: 1.5rem;
+        padding: 1.25rem;
+        background-color: rgba(15, 23, 42, 0.5);
+        border: 2px dashed rgba(55, 65, 81, 0.9);
+        border-radius: 0.5rem;
+        text-align: center;
+    }
+
+    .compose-attachment h5 {
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: #9ca3af;
+        margin-bottom: 0.5rem;
+    }
+
+    .compose-attachment .dropzone {
+        background-color: transparent;
+        border: none;
+        min-height: 120px;
+        padding: 1rem;
+    }
+
+    .compose-attachment .dz-message {
+        color: #6b7280;
+        margin: 0;
+    }
+
+    /* Action buttons */
+    .compose-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+        margin-top: 1.75rem;
+        padding-top: 1.5rem;
+        border-top: 1px dashed rgba(55, 65, 81, 0.9);
+    }
+
+    .compose-btn {
+        border-radius: 999px;
+        padding: 0.65rem 1.75rem;
+        font-weight: 600;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        border: none;
+        font-size: 0.95rem;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    .compose-btn-send {
+        background: linear-gradient(90deg, #22c55e, #16a34a);
+        color: #ecfdf5;
+        box-shadow: 0 8px 18px rgba(22, 163, 74, 0.45);
+    }
+
+    .compose-btn-send:hover {
+        color: #ecfdf5;
+        box-shadow: 0 10px 24px rgba(22, 163, 74, 0.6);
+        transform: translateY(-2px);
+    }
+
+    .compose-btn-discard {
+        background: rgba(15, 23, 42, 0.9);
+        color: #e5e7eb;
+        border: 1px solid rgba(55, 65, 81, 0.9);
+    }
+
+    .compose-btn-discard:hover {
+        background: rgba(30, 64, 175, 0.9);
+        color: #e5e7eb;
+        border-color: rgba(129, 140, 248, 0.7);
+    }
+
+    .compose-btn-draft {
+        background: rgba(251, 191, 36, 0.15);
+        color: #fbbf24;
+        border: 1px solid rgba(251, 191, 36, 0.5);
+    }
+
+    .compose-btn-draft:hover {
+        background: rgba(251, 191, 36, 0.25);
+        border-color: #fbbf24;
+    }
+</style>
+
+<div class="page-wrapper compose-dark-wrapper">
+    <div class="page-breadcrumb">
+        <div class="row">
+            <div class="col-12 d-flex align-items-center justify-content-between">
+                <div>
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb mb-1">
+                            <li class="breadcrumb-item">
+                                <a href="/Message/Inbox" class="link">Mailbox</a>
+                            </li>
+                            <li class="breadcrumb-item active" aria-current="page">Yeni Mesaj</li>
+                        </ol>
+                    </nav>
+                    <h4 class="page-title mb-0">Yeni Mesaj Oluştur</h4>
+                    <small class="text-muted">
+                        Yeni bir e-posta gönder
+                    </small>
+                </div>
+                <div>
+                    <a href="/Message/Inbox" class="btn btn-outline-secondary">
+                        <i class="mdi mdi-arrow-left mr-1"></i> Geri Dön
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid">
+        <div class="row justify-content-center">
+            <div class="col-lg-10 col-xl-8">
+                <div class="compose-card">
+                    <div class="compose-header">
+                        <div>
+                            <h4>Yeni Mesaj</h4>
+                            <span>Mesaj detaylarını doldurun</span>
+                        </div>
+                        <div>
+                            <i class="mdi mdi-email-edit" style="font-size: 1.75rem; color: #818cf8;"></i>
+                        </div>
+                    </div>
+
+                    <div class="compose-body">
+                        <form method="post">
+                            <div class="compose-form-group">
+                                <label class="compose-label">Alıcı E-posta</label>
+                                <input type="email" 
+                                       asp-for="ReceiverEmail" 
+                                       class="compose-input"
+                                       placeholder="ornek@eposta.com"
+                                       required>
+                            </div>
+
+                            <div class="compose-form-group">
+                                <label class="compose-label">Konu</label>
+                                <input type="text" 
+                                       asp-for="Subject" 
+                                       class="compose-input"
+                                       placeholder="Mesaj konusu"
+                                       required>
+                            </div>
+
+                            <div class="compose-form-group">
+                                <label class="compose-label">Mesaj</label>
+                                <textarea id="summernote"
+                                          asp-for="MessageDetail" 
+                                          class="compose-input" 
+                                          style="display:none;"></textarea>
+                            </div>
+
+                            <div class="compose-attachment">
+                                <h5><i class="mdi mdi-paperclip mr-1"></i> Dosya Ekle</h5>
+                                <div class="dropzone" id="myDropzone">
+                                    <div class="dz-message">
+                                        Dosyaları buraya sürükleyin veya tıklayın
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="compose-actions">
+                                <button type="submit" class="compose-btn compose-btn-send">
+                                    <i class="mdi mdi-send"></i>
+                                    Gönder
+                                </button>
+                               
+                                <button type="button" class="compose-btn compose-btn-discard">
+                                    <i class="mdi mdi-close"></i>
+                                    İptal
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $('#summernote').summernote({
+      placeholder: 'Mesajınızı yazınız',
+      tabsize: 2,
+      height: 120,
+      toolbar: [
+        ['style', ['style']],
+        ['font', ['bold', 'underline', 'clear']],
+        ['color', ['color']],
+        ['para', ['ul', 'ol', 'paragraph']],
+        ['table', ['table']],
+        ['insert', ['link', 'picture', 'video']],
+        ['view', ['fullscreen', 'codeview', 'help']]
+      ]
+    });
+
+    $("#dzid").dropzone({
+            url: "/file/post"
+        });
+</script>
