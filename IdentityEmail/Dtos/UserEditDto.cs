@@ -8,6 +8,7 @@
         public string ImageUrl { get; set; }
         public string Password { get; set; }
         public string ConfirmPassword { get; set; }
+        public string About { get; set; }
         public IFormFile Image { get; set; }
     }
 }

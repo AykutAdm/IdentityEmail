@@ -27,6 +27,7 @@ namespace IdentityEmail.Controllers
             userEditDto.Name = values.Name;
             userEditDto.Surname = values.Surname;
             userEditDto.ImageUrl = values.ImageUrl;
+            userEditDto.About = values.About;
             return View(userEditDto);
         }
 
@@ -38,6 +39,7 @@ namespace IdentityEmail.Controllers
             user.Name = userEditDto.Name;
             user.Surname = userEditDto.Surname;
             user.Email = userEditDto.Email;
+            user.About = userEditDto.About;
 
             var resource = Directory.GetCurrentDirectory();
             var extension = Path.GetExtension(userEditDto.Image.FileName);

@@ -1,0 +1,203 @@
+@model List<IdentityEmail.Entities.SentMessage>
+
+<style>
+    .recent-messages-card {
+        background: radial-gradient(circle at bottom left, #1e293b, #0f172a);
+        border: 1px solid rgba(56, 189, 248, 0.3);
+        border-radius: 1rem;
+        box-shadow: 0 10px 30px rgba(56, 189, 248, 0.2);
+    }
+
+    .recent-messages-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 1.5rem 1.5rem 1rem;
+        border-bottom: 2px solid rgba(56, 189, 248, 0.3);
+    }
+
+    .recent-messages-title {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+    }
+
+        .recent-messages-title i {
+            color: #7dd3fc;
+            width: 24px;
+            height: 24px;
+        }
+
+        .recent-messages-title h4 {
+            color: #e0f2fe;
+            font-size: 1.15rem;
+            font-weight: 600;
+            margin: 0;
+        }
+
+    .recent-messages-count {
+        background: rgba(56, 189, 248, 0.15);
+        border: 1px solid rgba(56, 189, 248, 0.4);
+        color: #bae6fd;
+        padding: 0.35rem 0.85rem;
+        border-radius: 999px;
+        font-size: 0.875rem;
+        font-weight: 600;
+    }
+
+    .recent-messages-list {
+        padding: 1rem;
+        display: grid;
+        gap: 0.75rem;
+    }
+
+    .message-item {
+        background: rgba(56, 189, 248, 0.08);
+        border: 1px solid rgba(56, 189, 248, 0.2);
+        border-radius: 0.75rem;
+        padding: 1rem 1.25rem;
+        transition: all 0.3s ease;
+        cursor: pointer;
+    }
+
+        .message-item:hover {
+            background: rgba(56, 189, 248, 0.12);
+            border-color: rgba(56, 189, 248, 0.4);
+            transform: translateX(5px);
+        }
+
+    .message-item-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 0.5rem;
+    }
+
+    .message-to {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: #7dd3fc;
+        font-size: 0.9rem;
+        font-weight: 500;
+    }
+
+        .message-to i {
+            width: 16px;
+            height: 16px;
+        }
+
+    .message-date {
+        color: #94a3b8;
+        font-size: 0.8rem;
+    }
+
+    .message-subject {
+        color: #e0f2fe;
+        font-weight: 600;
+        font-size: 0.95rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .message-preview {
+        color: #cbd5e1;
+        font-size: 0.85rem;
+        line-height: 1.5;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .message-badges {
+        display: flex;
+        gap: 0.5rem;
+        margin-top: 0.75rem;
+    }
+
+    .message-badge {
+        background: rgba(56, 189, 248, 0.15);
+        border: 1px solid rgba(56, 189, 248, 0.3);
+        color: #bae6fd;
+        padding: 0.25rem 0.75rem;
+        border-radius: 999px;
+        font-size: 0.75rem;
+        font-weight: 500;
+    }
+
+        .message-badge.priority-high {
+            background: rgba(239, 68, 68, 0.15);
+            border-color: rgba(239, 68, 68, 0.4);
+            color: #fca5a5;
+        }
+
+        .message-badge.priority-orta {
+            background: rgba(251, 146, 60, 0.15);
+            border-color: rgba(251, 146, 60, 0.4);
+            color: #fdba74;
+        }
+
+    .no-messages {
+        padding: 3rem 1.5rem;
+        text-align: center;
+        color: #94a3b8;
+    }
+
+        .no-messages i {
+            width: 48px;
+            height: 48px;
+            color: #475569;
+            margin-bottom: 1rem;
+        }
+</style>
+
+<div class="recent-messages-card">
+    <div class="recent-messages-header">
+        <div class="recent-messages-title">
+            <i data-feather="send"></i>
+            <h4>Son Gönderilen Mesajlar</h4>
+        </div>
+        <span class="recent-messages-count">@Model.Count</span>
+    </div>
+
+    @if (Model.Any())
+    {
+        <div class="recent-messages-list">
+            @foreach (var item in Model)
+            {
+                <div class="message-item">
+                    <div class="message-item-header">
+                        <div class="message-to">
+                            <i data-feather="user"></i>
+                            <span>@item.ReceiverEmail</span>
+                        </div>
+                        <span class="message-date">@item.SendDate.ToString("dd.MM.yyyy HH:mm")</span>
+                    </div>
+
+                    <div class="message-subject">@item.Subject</div>
+
+                    <div class="message-preview">@Html.Raw(item.MessageDetail)</div>
+
+
+                    <div class="message-badges">
+
+                        <span class="message-badge">@item.Category</span>
+
+
+                        <span class="message-badge priority-@item.Priority.ToLower()">@item.Priority</span>
+
+                    </div>
+
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="no-messages">
+            <i data-feather="inbox"></i>
+            <p class="mb-0">Henüz gönderilmiş mesaj bulunmuyor.</p>
+        </div>
+    }
+</div>

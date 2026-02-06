@@ -1,4 +1,4 @@
-﻿@model CreateUserRegisterDto
+@model CreateUserRegisterDto
 @{
     Layout = null;
 }
@@ -164,6 +164,21 @@
                 box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
             }
 
+        .terms-text {
+            font-size: 0.9rem;
+            color: #555;
+        }
+
+            .terms-text a {
+                color: #667eea;
+                font-weight: 600;
+                text-decoration: none;
+            }
+
+                .terms-text a:hover {
+                    text-decoration: underline;
+                }
+
         .login-link {
             text-align: center;
             margin-top: 25px;
@@ -299,6 +314,10 @@
 
                 <div class="text-danger" asp-validation-summary="ModelOnly"></div>
 
+                <p class="terms-text mb-3">
+                    <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#termsModal">Kullanım şartları</a>nı okudum ve kabul ediyorum.
+                </p>
+
                 <button type="submit" class="btn-register">
                     <i class="fas fa-user-plus"></i> Kayıt Ol
                 </button>
@@ -309,5 +328,74 @@
             </form>
         </div>
     </div>
+
+    <div class="modal fade" id="termsModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">📄 Kullanım Şartları</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+
+                <div class="modal-body">
+                    <p>
+                        Bu Email Manager uygulamasını kullanarak aşağıdaki şartları kabul etmiş sayılırsınız.
+                    </p>
+
+                    <ol>
+                        <li>
+                            <strong>Hizmet Tanımı</strong><br>
+                            Email Manager, kullanıcıların Gmail gibi e-posta hesaplarını tek bir panel üzerinden
+                            yönetmesini, e-postaları görüntülemesini, göndermesini ve organize etmesini sağlar.
+                        </li>
+
+                        <li>
+                            <strong>Hesap Güvenliği</strong><br>
+                            Kullanıcılar hesap bilgilerini gizli tutmakla yükümlüdür. Hesap üzerinden yapılan
+                            tüm işlemler kullanıcı sorumluluğundadır.
+                        </li>
+
+                        <li>
+                            <strong>Veri Kullanımı ve Gizlilik</strong><br>
+                            E-posta içerikleri yalnızca hizmetin sunulması amacıyla işlenir ve üçüncü kişilerle paylaşılmaz.
+                        </li>
+
+                        <li>
+                            <strong>Yapay Zeka Özellikleri</strong><br>
+                            Kategori ve öncelik tahminleri bilgilendirme amaçlıdır, doğruluğu garanti edilmez.
+                        </li>
+
+                        <li>
+                            <strong>Kullanıcı Sorumlulukları</strong><br>
+                            Kullanıcı uygulamayı yasalara aykırı şekilde kullanmamayı kabul eder.
+                        </li>
+
+                        <li>
+                            <strong>Hizmetin Değiştirilmesi</strong><br>
+                            Email Manager, hizmet içeriğinde değişiklik yapma hakkını saklı tutar.
+                        </li>
+
+                        <li>
+                            <strong>Sorumluluğun Sınırlandırılması</strong><br>
+                            Teknik aksaklıklar veya veri kayıplarından dolayı sorumluluk kabul edilmez.
+                        </li>
+
+                        <li>
+                            <strong>Şartların Kabulü</strong><br>
+                            Uygulamayı kullanmaya devam eden kullanıcılar bu şartları kabul etmiş sayılır.
+                        </li>
+                    </ol>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kapat</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

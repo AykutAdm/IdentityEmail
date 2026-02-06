@@ -206,10 +206,10 @@
                                 </div>
                                 <div class="message-detail-chip-group">
                                     <span class="message-detail-badge-category">
-                                        Kategori
+                                        @Model.Category
                                     </span>
                                     <span class="message-detail-badge-priority">
-                                        Öncelik
+                                        @Model.Priority
                                     </span>
                                 </div>
                             </div>
@@ -233,11 +233,21 @@
                         </div>
 
                         <div class="message-detail-footer">
-                            <p class="mb-1 text-muted">
+                            <p class="mb-2 text-muted">
                                 Bu mesaja hızlıca yanıt vermek için aşağıdaki butonları kullanabilirsiniz.
                             </p>
                             <a href="javascript:void(0)" class="mr-3">Reply</a>
                             <a href="javascript:void(0)">Forward</a>
+                            
+                            <div class="ai-reply-suggestion mt-4 p-4" style="background: rgba(139, 92, 246, 0.1); border-left: 4px solid #a78bfa; border-radius: 0.75rem;">
+                                <div class="d-flex align-items-center mb-3">
+                                    <i data-feather="cpu" style="width: 22px; height: 22px; color: #a78bfa;" class="mr-2"></i>
+                                    <strong style="color: #e9d5ff; font-size: 1.05rem;">AI Cevap Önerisi</strong>
+                                </div>
+                                <p class="mb-0" style="color: #d8b4fe; font-size: 1rem; line-height: 1.7;">
+                                    @ViewBag.ReplySuggestion
+                                </p>
+                            </div>
                         </div>
                     </div>
                 </div>

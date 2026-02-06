@@ -8,6 +8,9 @@
         public string Subject { get; set; }
         public string MessageDetail { get; set; }
         public DateTime SendDate { get; set; }
+
+        public string Category { get; set; }  
+        public string Priority { get; set; }      
         public bool IsStatus { get; set; }
     }
 }

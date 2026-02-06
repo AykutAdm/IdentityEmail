@@ -1,0 +1,75 @@
+@model IdentityEmail.Entities.AppUser
+
+<style>
+    .user-dd {
+        background: #1e293b !important;
+        border: 1px solid rgba(99, 102, 241, 0.3) !important;
+    }
+
+    .user-dd .bg-light {
+        background: rgba(99, 102, 241, 0.15) !important;
+    }
+
+    .user-dd h4,
+    .user-dd p {
+        color: #e9d5ff !important;
+    }
+
+    .user-dd .dropdown-item {
+        color: #c4b5fd !important;
+    }
+
+    .user-dd .dropdown-item:hover {
+        background: rgba(99, 102, 241, 0.2) !important;
+        color: #e9d5ff !important;
+    }
+
+    .user-dd .dropdown-item i {
+        color: #a78bfa !important;
+    }
+
+    .user-dd .dropdown-divider {
+        border-color: rgba(99, 102, 241, 0.2) !important;
+    }
+</style>
+
+<li class="nav-item dropdown">
+    <a class="nav-link dropdown-toggle waves-effect waves-dark pro-pic" href="" data-toggle="dropdown"
+       aria-haspopup="true" aria-expanded="false">
+        <span class="mr-3 font-normal d-none d-sm-inline-block pro-name">
+            <span>Hoş Geldiniz,</span>
+            @Model.Name @Model.Surname
+        </span>
+        <img src="~/ImageFiles/@Model.ImageUrl" alt="user" class="rounded-circle" width="40">
+    </a>
+    <div class="dropdown-menu dropdown-menu-right user-dd animated flipInY">
+        <div class="d-flex no-block align-items-center p-3 bg-light mb-2">
+            <div class="">
+                <img src="~/ImageFiles/@Model.ImageUrl" alt="user" class="rounded-circle" width="60">
+            </div>
+            <div class="ml-2">
+                <h4 class="mb-0">@Model.Name @Model.Surname</h4>
+                <p class="mb-0">@Model.Email</p>
+            </div>
+        </div>
+        <div class="profile-dis scrollable">
+            <a class="dropdown-item" href="/Profile/UserProfile">
+                <i class="ti-user mx-1"></i> Profilim
+            </a>
+            <a class="dropdown-item" href="/Dashboard/Index">
+                <i class="ti-dashboard mx-1"></i> Dashboard
+            </a>
+            <a class="dropdown-item" href="/Message/Inbox">
+                <i class="ti-email mx-1"></i> Gelen Kutusu
+            </a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="/Message/SendMessage">
+                <i class="ti-plus mx-1"></i> Yeni Mesaj
+            </a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="/Login/Logout">
+                <i class="fa fa-power-off mx-1"></i> Çıkış
+            </a>
+        </div>
+    </div>
+</li>

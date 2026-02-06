@@ -1,6 +1,7 @@
 using IdentityEmail.Context;
 using IdentityEmail.Entities;
 using IdentityEmail.Models;
+using IdentityEmail.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,6 +11,9 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<EmailContext>();
 
 builder.Services.AddIdentity<AppUser, AppRole>().AddEntityFrameworkStores<EmailContext>().AddErrorDescriber<CustomIdentityValidator>();
+
+builder.Services.AddScoped<AIService>();
+builder.Services.AddScoped<OpenAIService>();
 
 var app = builder.Build();
 

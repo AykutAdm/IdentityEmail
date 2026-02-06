@@ -56,15 +56,23 @@
     }
 
     .profile-header-icon {
-        width: 60px;
-        height: 60px;
+        width: 96px;
+        height: 96px;
         border-radius: 50%;
         background: linear-gradient(135deg, #818cf8, #ec4899);
+        padding: 3px;
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 1.75rem;
-        color: #fff;
+        box-shadow: 0 12px 30px rgba(129, 140, 248, 0.55);
+    }
+
+    .profile-header-icon img {
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 2px solid rgba(15, 23, 42, 0.95);
     }
 
     .profile-body {
@@ -261,7 +269,7 @@
                             <span>Kişisel bilgilerinizi güncelleyin</span>
                         </div>
                         <div class="profile-header-icon">
-                            <i class="mdi mdi-account-circle"></i>
+                            <img src="~/ImageFiles/@Model.ImageUrl" alt="Profil Fotoğrafı" />
                         </div>
                     </div>
 
@@ -305,6 +313,15 @@
                                            asp-for="Email" 
                                            class="profile-input"
                                            placeholder="email@example.com"
+                                           required>
+                                </div>
+
+                                <div class="profile-form-group">
+                                    <label class="profile-label">Hakkımda</label>
+                                    <input type="About"
+                                           asp-for="About"
+                                           class="profile-input"
+                                           placeholder="Hakkımda metini giriniz"
                                            required>
                                 </div>
                             </div>

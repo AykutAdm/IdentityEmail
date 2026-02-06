@@ -88,10 +88,13 @@
     .email-snippet {
         font-size: 0.875rem;
         color: #9ca3af;
-        max-width: 340px;
-        white-space: nowrap;
+        max-width: 280px;
+        display: -webkit-box;
+        -webkit-line-clamp: 1;
+        -webkit-box-orient: vertical;
         overflow: hidden;
         text-overflow: ellipsis;
+        white-space: normal;
     }
 
     .email-date {
@@ -215,19 +218,25 @@
                             </a>
 
                             <div class="px-3 pt-3 pb-1 text-uppercase small text-muted font-weight-semibold">
-                                Etiketler
+                                Kategoriler
                             </div>
-                            <a href="javascript:void(0)" class="list-group-item list-group-item-action">
+                            <a href="/Message/Inbox" class="list-group-item list-group-item-action @(string.IsNullOrEmpty(ViewBag.SelectedCategory) ? "active" : "")">
+                                <i class="mdi mdi-folder-outline mr-2"></i> Tümü
+                            </a>
+                            <a href="/Message/Inbox?category=İş" class="list-group-item list-group-item-action @(ViewBag.SelectedCategory == "İş" ? "active" : "")">
                                 <i class="mdi mdi-checkbox-blank-circle text-danger mr-2"></i> İş
                             </a>
-                            <a href="javascript:void(0)" class="list-group-item list-group-item-action">
+                            <a href="/Message/Inbox?category=İşletme" class="list-group-item list-group-item-action @(ViewBag.SelectedCategory == "İşletme" ? "active" : "")">
                                 <i class="mdi mdi-checkbox-blank-circle text-info mr-2"></i> İşletme
                             </a>
-                            <a href="javascript:void(0)" class="list-group-item list-group-item-action">
+                            <a href="/Message/Inbox?category=Aile" class="list-group-item list-group-item-action @(ViewBag.SelectedCategory == "Aile" ? "active" : "")">
                                 <i class="mdi mdi-checkbox-blank-circle text-warning mr-2"></i> Aile
                             </a>
-                            <a href="javascript:void(0)" class="list-group-item list-group-item-action">
+                            <a href="/Message/Inbox?category=Arkadaşlar" class="list-group-item list-group-item-action @(ViewBag.SelectedCategory == "Arkadaşlar" ? "active" : "")">
                                 <i class="mdi mdi-checkbox-blank-circle text-success mr-2"></i> Arkadaşlar
+                            </a>
+                            <a href="/Message/Inbox?category=Okul" class="list-group-item list-group-item-action @(ViewBag.SelectedCategory == "Okul" ? "active" : "")">
+                                <i class="mdi mdi-checkbox-blank-circle text-primary mr-2"></i> Okul
                             </a>
                         </div>
                     </div>
@@ -297,17 +306,17 @@
                                             </td>
                                             <td class="email-cell">
                                                 <span class="email-badge-category">
-                                                    Kategori
+                                                    @item.Category
                                                 </span>
                                             </td>
                                             <td class="email-cell">
                                                 <span class="email-badge-priority">
-                                                    Öncelik
+                                                    @item.Priority
                                                 </span>
                                             </td>
                                             <td class="email-cell">
                                                 <span class="email-snippet" title="@item.MessageDetail">
-                                                    @item.MessageDetail
+                                                    @(item.MessageDetail.Length > 80 ? item.MessageDetail.Substring(0, 80) + "..." : item.MessageDetail)
                                                 </span>
                                             </td>
                                             <td class="email-cell email-date">

@@ -1,0 +1,90 @@
+<style>
+    .openai-summary-card {
+        background: radial-gradient(circle at top right, #1e293b, #0f172a);
+        border: 1px solid rgba(139, 92, 246, 0.3);
+        border-radius: 1rem;
+        box-shadow: 0 10px 30px rgba(139, 92, 246, 0.2);
+        height: 100%;
+    }
+
+    .openai-summary-header {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        padding-bottom: 1rem;
+        border-bottom: 2px solid rgba(139, 92, 246, 0.3);
+        margin-bottom: 1.25rem;
+    }
+
+    .openai-summary-header i {
+        color: #a78bfa;
+        width: 24px;
+        height: 24px;
+    }
+
+    .openai-summary-header h4 {
+        color: #e9d5ff;
+        font-size: 1.15rem;
+        font-weight: 600;
+        margin: 0;
+    }
+
+    .openai-badges {
+        display: flex;
+        gap: 0.75rem;
+        margin-bottom: 1.25rem;
+    }
+
+    .openai-badge {
+        background: rgba(139, 92, 246, 0.15);
+        border: 1px solid rgba(139, 92, 246, 0.4);
+        color: #c4b5fd;
+        padding: 0.5rem 1rem;
+        border-radius: 999px;
+        font-size: 0.875rem;
+        font-weight: 500;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .openai-badge i {
+        width: 16px;
+        height: 16px;
+    }
+
+    .openai-summary-text {
+        background: rgba(139, 92, 246, 0.08);
+        border-left: 3px solid #a78bfa;
+        padding: 1rem 1.25rem;
+        border-radius: 0.5rem;
+        color: #d8b4fe;
+        line-height: 1.7;
+        font-size: 0.95rem;
+        margin: 0;
+    }
+</style>
+
+<div class="openai-summary-card">
+    <div class="card-body">
+        <div class="openai-summary-header">
+            <i data-feather="cpu"></i>
+            <h4>AI Mesaj Aktivite Analizi</h4>
+        </div>
+        
+        <div class="openai-badges">
+            <span class="openai-badge">
+                <i data-feather="send"></i>
+                Gönderilen: @ViewBag.SentCount
+            </span>
+            <span class="openai-badge">
+                <i data-feather="inbox"></i>
+                Gelen: @ViewBag.ReceivedCount
+            </span>
+        </div>
+
+        <p class="openai-summary-text">
+            @ViewBag.Summary
+        </p>
+    </div>
+</div>

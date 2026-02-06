@@ -49,16 +49,6 @@ namespace IdentityEmail.Controllers
             client.Send(mimeMessage);
             client.Disconnect(true);
 
-
-            // Gönderilen maili veritabanına kaydet
-            _context.Messages.Add(new Message
-            {
-                ReceiverEmail = mailRequestDto.ReceiverEmail,
-                Subject = mailRequestDto.Subject,
-                MessageDetail = mailRequestDto.MessageDetail,
-                SendDate = DateTime.Now
-            });
-
             TempData["SuccessMessage"] = "Mail başarıyla gönderildi!";
             return View();
         }

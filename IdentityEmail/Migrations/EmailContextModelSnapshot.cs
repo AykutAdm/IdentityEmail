@@ -70,6 +70,9 @@ namespace IdentityEmail.Migrations
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("ConfirmCode")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Email")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
@@ -142,10 +145,18 @@ namespace IdentityEmail.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("MessageId"));
 
+                    b.Property<string>("Category")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<bool>("IsStatus")
                         .HasColumnType("bit");
 
                     b.Property<string>("MessageDetail")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Priority")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -177,10 +188,18 @@ namespace IdentityEmail.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SentMessageId"));
 
+                    b.Property<string>("Category")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<bool>("IsRead")
                         .HasColumnType("bit");
 
                     b.Property<string>("MessageDetail")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Priority")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 

@@ -1,0 +1,91 @@
+@model List<Message>
+
+<style>
+    .mailbox {
+        background: #1e293b !important;
+        border: 1px solid rgba(99, 102, 241, 0.3) !important;
+    }
+
+    .mailbox .drop-title {
+        background: rgba(99, 102, 241, 0.15) !important;
+    }
+
+    .mailbox .drop-title h4 {
+        color: #e9d5ff !important;
+    }
+
+    .mailbox .message-item {
+        color: #c4b5fd !important;
+    }
+
+    .mailbox .message-item:hover {
+        background: rgba(99, 102, 241, 0.15) !important;
+    }
+
+    .mailbox .message-title {
+        color: #e9d5ff !important;
+    }
+
+    .mailbox .mail-desc {
+        color: #c4b5fd !important;
+    }
+
+    .mailbox .time {
+        color: #94a3b8 !important;
+    }
+
+    .mailbox .link {
+        color: #c4b5fd !important;
+    }
+
+    .mailbox .link:hover {
+        color: #e9d5ff !important;
+        background: rgba(99, 102, 241, 0.15) !important;
+    }
+</style>
+
+<li class="nav-item dropdown">
+    <a class="nav-link dropdown-toggle waves-effect waves-dark" href="" id="2" data-toggle="dropdown"
+       aria-haspopup="true" aria-expanded="false">
+        <i data-feather="mail"></i>
+        @if (Model.Count > 0)
+        {
+            <span class="badge badge-pill badge-danger">@Model.Count</span>
+        }
+    </a>
+    <div class="dropdown-menu dropdown-menu-right mailbox animated bounceInDown"
+         aria-labelledby="2">
+        <ul class="list-style-none">
+            <li>
+                <div class="drop-title bg-light">
+                    <h4 class="mb-0 mt-1">@Model.Count Yeni Mesaj</h4>
+                </div>
+            </li>
+            <li>
+                <div class="message-center message-body">
+                    @foreach (var item in Model)
+                    {
+                        <a href="/Message/MessageDetail/@item.MessageId" class="message-item">
+                            <span class="user-img">
+                                <div class="rounded-circle d-flex align-items-center justify-content-center" style="width: 48px; height: 48px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                                    <i data-feather="mail" style="width: 24px; height: 24px; color: white;"></i>
+                                </div>
+                            </span>
+                            <div class="mail-contnet">
+                                <h5 class="message-title">@item.SenderEmail</h5>
+                                <span class="mail-desc">@item.Subject</span>
+                                <span class="time">@item.SendDate.ToString("dd.MM.yyyy")</span>
+                            </div>
+                        </a>
+                    }
+                </div>
+            </li>
+            <li>
+                <a class="nav-link text-center link" href="/Message/Inbox">
+                    <b>Tüm Gelen Mailleri Gör</b>
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+        </ul>
+    </div>
+</li>

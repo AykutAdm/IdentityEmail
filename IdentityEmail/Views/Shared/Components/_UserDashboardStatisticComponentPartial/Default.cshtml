@@ -1,0 +1,54 @@
+﻿<div class="row">
+    <div class="col-md-6 col-lg-3">
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex align-items-center">
+                    <div>
+                        <span class="d-block text-dark op-7 font-medium">Gelen Mesaj Sayısı</span>
+                        <h3 class="mb-0">@ViewBag.v1</h3>
+                    </div>
+                    <div class="round round-purple ml-auto"><i data-feather="shield"></i></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6 col-lg-3">
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex align-items-center">
+                    <div>
+                        <span class="d-block text-dark op-7 font-medium">Gönderilen Mesaj Sayısı</span>
+                        <h3 class="mb-0">@ViewBag.v2</h3>
+                    </div>
+                    <div class="round round-primary ml-auto"><i data-feather="user-plus"></i></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6 col-lg-3">
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex align-items-center">
+                    <div>
+                        <span class="d-block text-dark op-7 font-medium">Son Gelen Mesaj Tarihi</span>
+                        <h3 class="mb-0">@(((DateTime)ViewBag.v3).ToShortDateString())</h3>
+                    </div>
+                    <div class="round round-info ml-auto"><i data-feather="cloud"></i></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6 col-lg-3">
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex align-items-center">
+                    <div>
+                        <span class="d-block text-dark op-7 font-medium">Son Gönderilen Mesaj Tarihi</span>
+                        <h3 class="mb-0">@(((DateTime)ViewBag.v4).ToShortDateString())</h3>
+                    </div>
+                    <div class="round round-danger ml-auto"><i data-feather="briefcase"></i></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

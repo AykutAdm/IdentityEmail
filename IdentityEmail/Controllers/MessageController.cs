@@ -1,6 +1,8 @@
-﻿using IdentityEmail.Context;
+using IdentityEmail.Context;
 using IdentityEmail.Dtos;
 using IdentityEmail.Entities;
+using IdentityEmail.Services;
+using MailKit;
 using MailKit.Net.Smtp;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -16,18 +18,29 @@ namespace IdentityEmail.Controllers
     {
         private readonly EmailContext _emailContext;
         private readonly UserManager<AppUser> _userManager;
+        private readonly AIService _aIService;
+        private readonly OpenAIService _openAIService;
 
-        public MessageController(EmailContext emailContext, UserManager<AppUser> userManager)
+        public MessageController(EmailContext emailContext, UserManager<AppUser> userManager, AIService aIService, OpenAIService openAIService)
         {
             _emailContext = emailContext;
             _userManager = userManager;
+            _aIService = aIService;
+            _openAIService = openAIService;
         }
 
-        public async Task<IActionResult> Inbox()
+        public async Task<IActionResult> Inbox(string category)
         {
             var user = await _userManager.FindByNameAsync(User.Identity.Name);
-            var values = _emailContext.Messages.Where(x => x.ReceiverEmail == user.Email).ToList();
-            return View(values);
+            var values = _emailContext.Messages.Where(x => x.ReceiverEmail == user.Email);
+
+            if (!string.IsNullOrEmpty(category))
+            {
+                values = values.Where(x => x.Category == category);
+            }
+
+            ViewBag.SelectedCategory = category;
+            return View(values.ToList());
         }
 
         [HttpGet]
@@ -40,6 +53,8 @@ namespace IdentityEmail.Controllers
         public async Task<IActionResult> SendMessage(MailRequestDto mailRequestDto)
         {
             var user = await _userManager.FindByNameAsync(User.Identity.Name);
+
+            var receiver = await _userManager.FindByEmailAsync(mailRequestDto.ReceiverEmail);
 
             MimeMessage mimeMessage = new MimeMessage();
 
@@ -60,13 +75,20 @@ namespace IdentityEmail.Controllers
             SmtpClient client = new SmtpClient();
             client.Connect("smtp.gmail.com", 587, false);
 
-            client.Authenticate("tourifyx0@gmail.com", "wcwh xvlw drtr blwb");
+            client.Authenticate("youremail@gmail.com", "#");
             client.Send(mimeMessage);
             client.Disconnect(true);
 
 
+            var combinedText = $"{mailRequestDto.Subject} - {mailRequestDto.MessageDetail}";
+            var predictedCategory = await _aIService.PredictCategoryAsync(combinedText);
+            var priority = await _aIService.PredictPriorityAsync(combinedText);
+
+
             var sentMessage = new SentMessage
             {
+                Category = predictedCategory,
+                Priority = priority,
                 SenderEmail = user.Email,
                 ReceiverEmail = mailRequestDto.ReceiverEmail,
                 Subject = mailRequestDto.Subject,
@@ -78,6 +100,24 @@ namespace IdentityEmail.Controllers
             _emailContext.SentMessages.Add(sentMessage);
             _emailContext.SaveChanges();
 
+
+            if (receiver != null)
+            {
+                var inboxMessage = new Message
+                {
+                    SenderEmail = user.Email,
+                    ReceiverEmail = receiver.Email,
+                    Subject = mailRequestDto.Subject,
+                    MessageDetail = mailRequestDto.MessageDetail,
+                    SendDate = DateTime.Now,
+                    Category = predictedCategory,
+                    Priority = priority
+                };
+
+                _emailContext.Messages.Add(inboxMessage);
+            }
+            _emailContext.SaveChanges();
+
             TempData["SuccessMessage"] = "Mail başarıyla gönderildi!";
             return RedirectToAction("SendMessage");
 
@@ -87,8 +127,12 @@ namespace IdentityEmail.Controllers
         public async Task<IActionResult> MessageDetail(int id)
         {
             var user = await _userManager.FindByNameAsync(User.Identity.Name);
-            var values = _emailContext.Messages.FirstOrDefault(x => x.MessageId == id && x.ReceiverEmail == user.Email);
-            return View(values);
+            var message = _emailContext.Messages.FirstOrDefault(x => x.MessageId == id && x.ReceiverEmail == user.Email);
+            
+            var replySuggestion = await _openAIService.GenerateReplySuggestionAsync(message.MessageDetail, message.Subject);
+            ViewBag.ReplySuggestion = replySuggestion;
+            
+            return View(message);
         }
 
 

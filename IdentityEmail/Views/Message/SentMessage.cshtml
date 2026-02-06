@@ -119,6 +119,28 @@
         color: #cbd5e1;
     }
 
+    .email-badge-category,
+    .email-badge-priority {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0.15rem 0.7rem;
+        border-radius: 999px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        white-space: nowrap;
+    }
+
+    .email-badge-category {
+        background-color: rgba(129, 140, 248, 0.25);
+        color: #c7d2fe;
+    }
+
+    .email-badge-priority {
+        background-color: rgba(248, 113, 113, 0.35);
+        color: #fee2e2;
+    }
+
     .email-actions {
         gap: 0.35rem;
     }
@@ -259,6 +281,8 @@
                                     <th>Alıcı</th>
                                     <th>Konu</th>
                                     <th>Mesaj Özeti</th>
+                                    <th>Kategori</th>
+                                    <th>Öncelik</th>
                                     <th style="width:100px;">Durum</th>
                                     <th style="width:120px;">Tarih</th>
                                     <th style="width:110px;" class="text-right">İşlemler</th>
@@ -298,9 +322,18 @@
                                             </td>
                                             <td class="email-cell">
                                                 <span class="email-snippet" title="@item.MessageDetail">
-                                                    @item.MessageDetail
+                                                    @item.MessageDetail.Substring(0,40)
                                                 </span>
                                             </td>
+
+                                            <td class="email-cell">
+                                                <span class="email-badge-category">@item.Category</span>
+                                            </td>
+
+                                            <td class="email-cell">
+                                                <span class="email-badge-priority">@item.Priority</span>
+                                            </td>
+
                                             <td class="email-cell">
                                                 @if (item.IsRead)
                                                 {
